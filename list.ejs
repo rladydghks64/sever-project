@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리스트</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    
+    <%- include('menu.html') %>
+    <p></p>
+        
+    <form action="/save" method="post"></form>
+    <div class="container mt-4">
+        <table class="table table-hover table-striped text-center" style="border: 1px solid;">
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>작성일</th>
+                    <th>삭제</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i = 0; i < posts.length; i++){ %>
+                    <tr>
+                        <td><a href = "/content/<%= posts[i]._id %>"><%= posts[i].title %></a></td>
+                        <td><%= new Date(posts[i].date).toLocaleDateString() %></td>
+                        <td><button class="btn-delete" data-id="<%= posts[i]._id %>">삭제</button></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <div clsass = "container my-3">
+        <button class = 'btn btn-primary enter' style="float: right; margin-right: 310px">글쓰기</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.btn-delete').click(function() {
+                const postId = $(this).data('id');
+                $.ajax({
+                    type: 'post',
+                    url: '/delete',
+                    data: { _id: postId },
+                    success: function(result) {
+                        console.log(result);
+                        location.reload();
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.error('Error deleting post');
+                    }
+                });
+            });
+        });
+        $('.enter').click(function(e){
+        location.href = "\enter";
+    })
+        $('.sbtn').click(function(){
+            let inputValue = $('.sword').val();
+            location.href='\\search?value=' +inputValue;
+        })
+    </script>
+</body>
+</html>
